@@ -3,138 +3,113 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Generate PDF</title>
   </head>
   <body>
-    <h1>Filo pdf</h1>
-    <button onclick="generatePDF()">Download</button>
+    <h1>Generate PDF with User Input</h1>
+
+    <label for="studentName">Student Name:</label>
+    <input type="text" id="studentName" placeholder="Enter student name" /><br />
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" placeholder="Enter address" /><br />
+
+    <label for="phone">Phone:</label>
+    <input type="text" id="phone" placeholder="Enter phone number" /><br />
+
+    <label for="guardianPhone">Guardian Phone:</label>
+    <input type="text" id="guardianPhone" placeholder="Enter guardian phone number" /><br />
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" placeholder="Enter email" /><br />
+
+    <button onclick="generatePDF()">Download PDF</button>
 
     <script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
     <script>
       function generatePDF() {
-        var pdfObject = jsPDFInvoiceTemplate.default(props); //returns number of pages created
-        console.log("object", pdfObject);
-      }
+        // Get user input values
+        const studentName = document.getElementById("studentName").value;
+        const address = document.getElementById("address").value;
+        const phone = document.getElementById("phone").value;
+        const guardianPhone = document.getElementById("guardianPhone").value;
+        const email = document.getElementById("email").value;
 
-      var props = {
-        outputType: jsPDFInvoiceTemplate.OutputType.Save,
-        returnJsPDFDocObject: true,
-        fileName: "Filopateer Nabil",
-        orientationLandscape: false,
-        compress: true,
-        logo: {
-          src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/logo.png",
-          type: "PNG", //optional, when src= data:uri (nodejs case)
-          width: 53.33, //aspect ratio = width/height
-          height: 26.66,
-          margin: {
-            top: 0, //negative or positive num, from the current position
-            left: 0, //negative or positive num, from the current position
+        // Check if all fields are filled
+        if (!studentName || !address || !phone || !guardianPhone || !email) {
+          alert("Please fill all the fields before generating the PDF.");
+          return;
+        }
+
+        // Define PDF properties
+        const props = {
+          outputType: jsPDFInvoiceTemplate.OutputType.Save,
+          returnJsPDFDocObject: true,
+          fileName: "Student_Report",
+          orientationLandscape: false,
+          compress: true,
+          logo: {
+            src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/logo.png",
+            type: "PNG",
+            width: 53.33,
+            height: 26.66,
+            margin: {
+              top: 0,
+              left: 0,
+            },
           },
-        },
-        stamp: {
-          inAllPages: true, //by default = false, just in the last page
-          src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/qr_code.jpg",
-          type: "JPG", //optional, when src= data:uri (nodejs case)
-          width: 20, //aspect ratio = width/height
-          height: 20,
-          margin: {
-            top: 0, //negative or positive num, from the current position
-            left: 0, //negative or positive num, from the current position
+          business: {
+            name: "Syntax Academy",
+            address: "Assiut, Al-Gomhoria Street, in front of Bazooka Restaurant",
+            phone: "01270668295",
+            website: "www.Syntax_Academy.com",
           },
-        },
-        business: {
-          name: "Business Name",
-          address: "Albania, Tirane ish-Dogana, Durres 2001",
-          phone: "(+355) 069 11 11 111",
-          email: "email@example.com",
-          email_1: "info@example.al",
-          website: "www.example.al",
-        },
-        contact: {
-          label: "Invoice issued for:",
-          name: "Client Name",
-          address: "Albania, Tirane, Astir",
-          phone: "(+355) 069 22 22 222",
-          email: "client@website.al",
-          otherInfo: "www.website.al",
-        },
-        invoice: {
-          label: "Invoice #: ",
-          num: 19,
-          invDate: "Payment Date: 01/01/2021 18:12",
-          invGenDate: "Invoice Date: 02/02/2021 10:17",
-          headerBorder: false,
-          tableBodyBorder: false,
-          header: [
-            {
-              title: "#",
-              style: {
-                width: 10,
-              },
-            },
-            {
-              title: "Title",
-              style: {
-                width: 30,
-              },
-            },
-            {
-              title: "Description",
-              style: {
-                width: 80,
-              },
-            },
-            { title: "Price" },
-            { title: "Quantity" },
-            { title: "Unit" },
-            { title: "Total" },
-          ],
-          table: Array.from(Array(10), (item, index) => [
-            index + 1,
-            "There are many variations ",
-            "Lorem Ipsum is simply dummy text dummy text ",
-            200.5,
-            4.5,
-            "m2",
-            400.5,
-          ]),
-          additionalRows: [
-            {
-              col1: "Total:",
-              col2: "145,250.50",
-              col3: "ALL",
-              style: {
-                fontSize: 14, //optional, default 12
-              },
-            },
-            {
-              col1: "VAT:",
-              col2: "20",
-              col3: "%",
-              style: {
-                fontSize: 10, //optional, default 12
-              },
-            },
-            {
-              col1: "SubTotal:",
-              col2: "116,199.90",
-              col3: "ALL",
-              style: {
-                fontSize: 10, //optional, default 12
-              },
-            },
-          ],
-          invDescLabel: "Invoice Note",
-          invDesc:
-            "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary.",
-        },
-        footer: {
-          text: "The invoice is created on a computer and is valid without the signature and stamp.",
-        },
-        pageEnable: true,
-        pageLabel: "Page ",
-      };
+          contact: {
+            label: "Student Name:",
+            name: studentName,
+            address: address,
+            phone: phone,
+            email: email,
+          },
+          invoice: {
+            invDate: "Payment Date: 01/01/2023",
+            invGenDate: "Invoice Date: 02/01/2023",
+            headerBorder: false,
+            tableBodyBorder: false,
+            rowHeight: 20, // Adds spacing below each row
+            header: [
+              { title: "#", style: { width: 10 } },
+              { title: "Student Name", style: { width: 30 } },
+              { title: "Address", style: { width: 30 } },
+              { title: "Phone", style: { width: 30 } },
+              { title: "Guardian Number", style: { width: 40 } },
+              { title: "Email", style: { width: 40 } },
+            ],
+            table: [
+
+              [
+                1,
+                studentName,
+                address,
+                phone,
+                guardianPhone,
+                email,
+              ],
+            ],
+            invDescLabel: "Note:",
+            invDesc:
+              "This file is generated for the purpose of academic record submission. Please ensure the data is accurate and submit it to the concerned authority.",
+          },
+          footer: {
+            text: "This PDF is generated for academic purposes and does not require a signature or stamp.",
+          },
+          pageEnable: true,
+          pageLabel: "Page ",
+        };
+
+        const pdfObject = jsPDFInvoiceTemplate.default(props); // Generates the PDF
+        console.log("PDF Object:", pdfObject);
+      }
     </script>
   </body>
 </html>
